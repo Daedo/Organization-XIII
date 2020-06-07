@@ -1,0 +1,43 @@
+
+<mat-form-field>
+    <mat-label>Somebody Name</mat-label>
+    <input matInput type="text" placeholder="Your name..." value="Sora" [(ngModel)]="name" required>
+</mat-form-field>
+<button type="button" (click)="startNorting()">Get Norted!</button>
+
+
+<mat-expansion-panel class="settings">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Settings
+        </mat-panel-title>
+        <mat-panel-description>
+            Customize your norting experience...
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Options -->
+    <mat-form-field>
+        <mat-label>Number of Words</mat-label>
+        <input matInput type="number" value="1" [(ngModel)]="wordCount">
+    </mat-form-field> <br/>
+
+
+    <mat-label>Bigram weight</mat-label>
+    <mat-slider min="1" max="3" step="0.1" value="1" [(ngModel)]="biWeight"></mat-slider> <br/>
+    <mat-label>Trigram weight</mat-label>
+    <mat-slider min="1" max="3" step="0.1" value="1" [(ngModel)]="triWeight"></mat-slider><br/>
+    <mat-label>Quadgram weight</mat-label>
+    <mat-slider min="1" max="3" step="0.1" value="1" [(ngModel)]="quadWeight"></mat-slider><br/>
+
+    <mat-form-field>
+        <mat-label>Number of Generated Names</mat-label>
+        <input matInput type="number" value="15"  [(ngModel)]="beamSize">
+    </mat-form-field><br/>
+
+    <mat-form-field>
+        <mat-label>Recuesent's Sigil</mat-label>
+        <input matInput  placeholder="Letters to be added to the name for reasons..." value="X"  [(ngModel)]="sigil">
+    </mat-form-field>
+
+</mat-expansion-panel>
