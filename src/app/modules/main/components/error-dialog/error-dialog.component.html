@@ -1,4 +1,7 @@
 <p>Master Xehanort has rejected your application:</p>
-<b>{{errorMessage}}</b>
+
+<ul>
+	<li *ngFor="let error of errorMessages">{{error}}</li>
+</ul>
 <br/>
-<button type="button" (click)="close()">Ok</button>
+<button type="button" (click)="close()">My Deepest Apologies!</button>

@@ -1,3 +1,22 @@
 .settings {
-    width: 50%;
+	width: 75%;
+	margin-left: 1em;
+}
+
+div.settings {
+	margin-top: 1em;
+}
+
+mat-form-field {
+	width: 50%;
+	margin-right: 2em;
+}
+
+label {
+	width: 25%;
+	display: inline-block;
+}
+
+mat-slider {
+	width: 30%;
 }

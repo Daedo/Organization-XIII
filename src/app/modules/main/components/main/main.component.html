@@ -1,3 +1,4 @@
 <app-input (generate)="generateNames($event)"></app-input>
+<br/>
 <app-loading *ngIf="isLoading"></app-loading>
-<app-output-list *ngIf="hasOutput"></app-output-list>
+<app-output-list *ngIf="hasOutput" [names]="names"></app-output-list>
