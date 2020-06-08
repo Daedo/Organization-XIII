@@ -9,8 +9,15 @@ describe('Language Model', () => {
 		model = new LanguageModel(options);
 	});
 
-	it('Sanity Check', () => {
+	it('Bigram Check', () => {
 		expect(model.rate('xax')).toBeLessThan(model.rate('xxa'));
 	});
 
+	it('Wordboundary Check', () => {
+		expect(model.rate('a-a')).toBeLessThan(model.rate('-aa'));
+	});
+
+	it('Final Check', () => {
+		expect(model.rate('-aa', false)).toBeLessThan(model.rate('-aa', true));
+	});
 });
