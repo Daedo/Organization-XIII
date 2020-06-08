@@ -69,7 +69,9 @@ export class NameGenerator {
 		let out: string[] = [];
 		names.forEach( e => out.push(e.name));
 		if (end) {
-			out = out.map(s => s[0].toUpperCase() + s.slice(1).toLowerCase());
+			out = out.map(s => s.replace(/^-+/, ''))	// Remove Leading dashes
+					.map(s => s.replace(/-+$/, ''))		// Remove Trailing dashes
+					.map(s => s[0].toUpperCase() + s.slice(1).toLowerCase());
 		}
 		return out;
 	}

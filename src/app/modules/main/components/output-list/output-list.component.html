@@ -1,8 +1,11 @@
 <mat-card>
-	<mat-card-title>Names</mat-card-title>
+	<mat-card-header>
+		<mat-card-title>Names</mat-card-title>
+	</mat-card-header>
 	<mat-card-content>
-	<mat-list role="list">
-		<mat-list-item role="listitem" *ngFor="let name of names">{{name}}</mat-list-item>
-	</mat-list>
+		<hr/>
+		<mat-list role="list">
+			<mat-list-item role="listitem" *ngFor="let name of names">{{name}}</mat-list-item>
+		</mat-list>
 	</mat-card-content>
 </mat-card>
