@@ -36,7 +36,10 @@ export class MainComponent implements OnInit {
 		// Send the generator to the worker
 		const generator = new NameGenerator(this.options);
 		setTimeout( () => {
+			console.log('Start Name Generation');
 			this.names = generator.runGenerator();
+			console.log('Done');
+			console.log(this.names);
 		});
 	}
 }

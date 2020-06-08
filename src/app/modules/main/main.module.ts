@@ -10,10 +10,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatSelectModule} from '@angular/material/select';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatListModule} from '@angular/material/list';
-import {MatCardModule} from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
 	declarations: [MainComponent, InputComponent, OutputListComponent, LoadingComponent, ErrorDialogComponent],
@@ -27,7 +28,8 @@ import {MatCardModule} from '@angular/material/card';
 		MatSelectModule,
 		MatProgressBarModule,
 		MatListModule,
-		MatCardModule
+		MatCardModule,
+		MatSlideToggleModule
 	]
 })
 export class MainModule { }

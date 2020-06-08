@@ -61,5 +61,7 @@
 	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="triWeight"></mat-slider> <br/>
 	
 	<label class="slider-label">Quadgram weight</label>
-    <mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="quadWeight"></mat-slider> <br/>
+	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="quadWeight"></mat-slider> <br/>
+	
+	<mat-slide-toggle [(ngModel)]="backoff" color="primary">Use N-Gram Backoff</mat-slide-toggle>
 </mat-expansion-panel>

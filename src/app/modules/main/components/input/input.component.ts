@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { GeneratorOptions } from '../../../../model/generator-options';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { LanguageModelOptions } from 'src/app/model/language-model-options';
 
 @Component({
 	selector: 'app-input',
@@ -22,6 +23,7 @@ export class InputComponent implements OnInit {
 	beamSize = 15;
 	sigil = 'X';
 	languageModel = 'english';
+	backoff = true;
 
 	constructor(private dialog: MatDialog) {
 		this.generate = new EventEmitter();
@@ -77,8 +79,8 @@ export class InputComponent implements OnInit {
 			});
 			return;
 		}
-		const options = new GeneratorOptions(this.name, this.wordCount, this.biWeight, this.triWeight, this.quadWeight,
-											this.numberOfNames, this.beamSize, this.sigil, this.languageModel);
+		const langOptions = new LanguageModelOptions(this.languageModel, this.biWeight, this.triWeight, this.quadWeight, this.backoff);
+		const options = new GeneratorOptions(this.name, this.wordCount, this.numberOfNames, this.beamSize, this.sigil, langOptions);
 		this.generate.emit(options);
 	}
 
