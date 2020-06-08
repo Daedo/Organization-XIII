@@ -15,6 +15,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
 	declarations: [MainComponent, InputComponent, OutputListComponent, LoadingComponent, ErrorDialogComponent],
@@ -29,7 +30,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 		MatProgressBarModule,
 		MatListModule,
 		MatCardModule,
-		MatSlideToggleModule
+		MatSlideToggleModule,
+		MatTooltipModule
 	]
 })
 export class MainModule { }

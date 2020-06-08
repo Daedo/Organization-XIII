@@ -18,34 +18,38 @@
     </mat-expansion-panel-header>
 
     <!-- Options -->
-	<mat-form-field>
+	<mat-form-field matTooltip="How many names should be generated" [matTooltipPosition]="'right'">
         <mat-label>Number of Generated Names</mat-label>
-        <input matInput type="number" value="15" min="1" max="100" [(ngModel)]="numberOfNames" required>
-	</mat-form-field> <br/>
+		<input matInput type="number" value="15" min="1" max="100" [(ngModel)]="numberOfNames" required>
+	</mat-form-field > <br/>
 	
-	<mat-form-field>
+	<mat-form-field matTooltip="Number of words each name can contain" [matTooltipPosition]="'right'">
         <mat-label>Words per Name</mat-label>
         <input matInput type="number" value="1" min="1" max="3" [(ngModel)]="wordCount" required>
     </mat-form-field> <br/>
 
-	<mat-form-field>
+	<mat-form-field matTooltip="Letters to be added to the name. May be used as lexical GPS." [matTooltipPosition]="'right'">
         <mat-label>Recuesent's Sigil</mat-label>
         <input matInput  placeholder="Letters to be added to the name for reason" value="X"  [(ngModel)]="sigil">
 	</mat-form-field> <br/>
 	
-	<mat-form-field>
+	<mat-form-field matTooltip="Size of the search beam. Improves name quality at the cost of runtime." [matTooltipPosition]="'right'">
         <mat-label>Beam Size</mat-label>
         <input matInput type="number" value="15" min="1" max="100" [(ngModel)]="beamSize" required>
 	</mat-form-field> <br/>
 	
     <label>Bigram weight</label>
-	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="biWeight"></mat-slider> <br/>
+	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="biWeight"
+		matTooltip="Importance of 'pronouncabillity' of letter pairs for the name" [matTooltipPosition]="'right'"></mat-slider> <br/>
 
     <label>Trigram weight</label>
-	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="triWeight"></mat-slider> <br/>
+	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="triWeight"
+		matTooltip="Importance of 'pronouncabillity' of letter tripples for the name" [matTooltipPosition]="'right'"></mat-slider> <br/>
 	
 	<label class="slider-label">Quadgram weight</label>
-	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="quadWeight"></mat-slider> <br/>
+	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="quadWeight"
+		matTooltip="Importance of 'pronouncabillity' of letter quadruples for the name" [matTooltipPosition]="'right'"></mat-slider> <br/>
 	
-	<mat-slide-toggle [(ngModel)]="backoff" color="primary">Use N-Gram Backoff</mat-slide-toggle>
+	<mat-slide-toggle [(ngModel)]="backoff" color="primary"
+		matTooltip="Reduces tendency of putting rare letters at the beginning/ end of a word." [matTooltipPosition]="'right'">Use N-Gram Backoff</mat-slide-toggle>
 </mat-expansion-panel>
