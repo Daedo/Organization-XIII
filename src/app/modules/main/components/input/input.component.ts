@@ -22,7 +22,6 @@ export class InputComponent implements OnInit {
 	numberOfNames = 15;
 	beamSize = 15;
 	sigil = 'X';
-	languageModel = 'english';
 	backoff = true;
 
 	constructor(private dialog: MatDialog) {
@@ -79,7 +78,7 @@ export class InputComponent implements OnInit {
 			});
 			return;
 		}
-		const langOptions = new LanguageModelOptions(this.languageModel, this.biWeight, this.triWeight, this.quadWeight, this.backoff);
+		const langOptions = new LanguageModelOptions(this.biWeight, this.triWeight, this.quadWeight, this.backoff);
 		const options = new GeneratorOptions(this.name, this.wordCount, this.numberOfNames, this.beamSize, this.sigil, langOptions);
 		this.generate.emit(options);
 	}

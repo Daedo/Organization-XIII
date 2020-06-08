@@ -5,7 +5,7 @@ describe('Language Model', () => {
 	let model: LanguageModel;
 
 	beforeAll(() => {
-		const options = new LanguageModelOptions('english', 1, 1, 1, true);
+		const options = new LanguageModelOptions(1, 1, 1, true);
 		model = new LanguageModel(options);
 	});
 

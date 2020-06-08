@@ -36,24 +36,8 @@
 	<mat-form-field>
         <mat-label>Beam Size</mat-label>
         <input matInput type="number" value="15" min="1" max="100" [(ngModel)]="beamSize" required>
-    </mat-form-field> <br/>
-
-	<mat-form-field appearance="fill">
-		<mat-label>Language Model</mat-label>
-		<mat-select value="english" [(ngModel)]="languageModel">
-			<mat-option value="danish">Danish</mat-option>
-			<mat-option value="english">English</mat-option>
-			<mat-option value="finish">Finnish</mat-option>
-			<mat-option value="french">French</mat-option>
-			<mat-option value="german">German</mat-option>
-			<mat-option value="icelandic">Icelandic</mat-option>
-			<mat-option value="polish">Polish</mat-option>
-			<mat-option value="russian">Russian</mat-option>
-			<mat-option value="spanish">Spanish</mat-option>
-			<mat-option value="swedish">Swedish</mat-option>
-		</mat-select>
 	</mat-form-field> <br/>
-
+	
     <label>Bigram weight</label>
 	<mat-slider thumbLabel min="0" max="3" step="0.1" value="1" [(ngModel)]="biWeight"></mat-slider> <br/>
 
