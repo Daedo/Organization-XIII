@@ -15,6 +15,13 @@ export class NameGenerator {
 		this.languageModel = new LanguageModel(settings.modelOptions);
 	}
 
+	private static formatName(name: string): string {
+		return name.split('-')
+			.filter(s => s.length > 0)
+			.map(s => s[0].toUpperCase() + s.slice(1).toLowerCase())
+			.join('-');
+	}
+
 	public runGenerator(): string[] {
 		const name = this.settings.name.toUpperCase();
 		let sigil = this.settings.sigil;
@@ -54,7 +61,7 @@ export class NameGenerator {
 				const optionA = letter + subname;
 				if (! closed.has(optionA)) {
 					closed.add(optionA);
-					const rating = this.languageModel.rate(optionA);
+					const rating = this.languageModel.rate(optionA, end);
 					names.enq({name: optionA, prio: rating});
 				}
 
@@ -74,11 +81,8 @@ export class NameGenerator {
 		let out: string[] = [];
 		names.forEach( e => out.push(e.name));
 		if (end) {
-			out = out
-					.reverse()
-					.map(s => s.replace(/^-+/, ''))	// Remove Leading dashes
-					.map(s => s.replace(/-+$/, ''))		// Remove Trailing dashes
-					.map(s => s[0].toUpperCase() + s.slice(1).toLowerCase());
+			out = out.reverse() // Order by decreasing pronouncabillity
+					.map(NameGenerator.formatName); // Capitalize
 		}
 		return out;
 	}
@@ -98,4 +102,6 @@ export class NameGenerator {
 			queue.deq();
 		}
 	}
+
+	
 }

@@ -12,7 +12,7 @@ interface Model {
 const model = (data as any).default as Model;
 
 export class LanguageModel {
-	private static readonly SPACE_END_WEIGHT = 100;
+	private static readonly EMPTY_WORD_WEIGHT = 100;
 	private maps: Map<string, number>[];
 	private weights: number[];
 
@@ -52,28 +52,7 @@ export class LanguageModel {
 	private getWeight(n: number): number {
 		return this.weights[n - 2];
 	}
-
-	private rateNGram(ngram: string, isFinalRating: boolean): number {
-		if (ngram.includes('-')) {
-			let rating = 0;
-			const subs = ngram.split('-');
-			// Special Treatment for Word Borders
-			// rate(A-B) => rate(A) + rate(B)
-			// rate(AB-) => rate(AB) (if not final); rate(AB) + spaceEndWeight (if final)
-			for (const sub of subs) {
-				if (sub.length === 0) {
-					if (isFinalRating) {
-						rating += LanguageModel.SPACE_END_WEIGHT;
-					}
-				} else {
-					rating += this.getNGramRating(sub);
-				}
-			}
-			return rating;
-		}
-		return this.getNGramRating(ngram);
-	}
-
+	
 	private getNGramRating(ngram: string) {
 		const map = this.getMap(ngram.length);
 		if (map.has(ngram)) {
@@ -82,31 +61,48 @@ export class LanguageModel {
 		return 1;
 	}
 
-	public rate(name: string, isFinalRating: boolean = false): number {
+	private rateWord(name: string): number {
+		if (name.length < 2) {
+			return this.getNGramRating(name);
+		}
+
 		let total = 0;
 		for (let n = 2; n < 5; n++) {
 			const end = name.length - n + 1;
 			const weight = this.getWeight(n);
 			for (let i = 0; i < end; i++) {
 				const ngram = name.substring(i, i + n);
-				let rating = this.rateNGram(ngram, isFinalRating);
+				let rating = this.getNGramRating(ngram);
 
 				if (this.options.nGramBackoff) {
 					if (i === 0) {
 						for (let j = 1; j < n; j++) {
 							const backoff = name.substring(0, j);
-							rating += this.rateNGram(backoff, isFinalRating);
+							rating += this.getNGramRating(backoff);
 						}
 					}
 
 					if (i === end - 1) {
 						for (let j = 1; j < n; j++) {
 							const backoff = name.substring(name.length - j, name.length);
-							rating += this.rateNGram(backoff, isFinalRating);
+							rating += this.getNGramRating(backoff);
 						}
 					}
 				}
 				total += rating * weight;
+			}
+		}
+		return total;
+	}
+
+	public rate(name: string, isFinalRating: boolean = false): number {
+		let total = 0;
+		const words = name.split('-');
+		for (const word of words) {
+			if (word.length > 0) {
+				total += this.rateWord(word);
+			} else if (isFinalRating) {
+				total += LanguageModel.EMPTY_WORD_WEIGHT;
 			}
 		}
 
