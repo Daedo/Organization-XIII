@@ -102,6 +102,4 @@ export class NameGenerator {
 			queue.deq();
 		}
 	}
-
-	
 }
