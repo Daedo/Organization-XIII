@@ -8,6 +8,9 @@ import { MainModule } from './modules/main/main.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatTabsModule} from '@angular/material/tabs';
 import { AboutModule } from './modules/about/about.module';
+import { MatIconModule } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
 	declarations: [
@@ -20,7 +23,10 @@ import { AboutModule } from './modules/about/about.module';
 		MainModule,
 		AboutModule,
 		MatToolbarModule,
-		MatTabsModule
+		MatTabsModule,
+		MatIconModule,
+		HttpClientModule,
+		MatButtonModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]
