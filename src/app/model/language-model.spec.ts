@@ -10,14 +10,18 @@ describe('Language Model', () => {
 	});
 
 	it('Bigram Check', () => {
-		expect(model.rate('xax')).toBeLessThan(model.rate('xxa'));
+		expect(model.rate('XAX')).toBeLessThan(model.rate('XXA'));
 	});
 
 	it('Wordboundary Check', () => {
-		expect(model.rate('a-a')).toBeLessThan(model.rate('-aa'));
+		expect(model.rate('A-A')).toBeLessThan(model.rate('-AA'));
 	});
 
 	it('Final Check', () => {
-		expect(model.rate('-aa', false)).toBeLessThan(model.rate('-aa', true));
+		expect(model.rate('-AA', false)).toBeLessThan(model.rate('-AA', true));
+	});
+
+	it('Sora Check', () => {
+		expect(model.rate('ROXAS', true)).toBeLessThan(model.rate('SXROA', true));
 	});
 });

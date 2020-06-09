@@ -53,7 +53,7 @@ export class LanguageModel {
 		return this.weights[n - 2];
 	}
 
-	private rateNGram(ngram: string, finalRating: boolean): number {
+	private rateNGram(ngram: string, isFinalRating: boolean): number {
 		if (ngram.includes('-')) {
 			let rating = 0;
 			const subs = ngram.split('-');
@@ -62,7 +62,7 @@ export class LanguageModel {
 			// rate(AB-) => rate(AB) (if not final); rate(AB) + spaceEndWeight (if final)
 			for (const sub of subs) {
 				if (sub.length === 0) {
-					if (finalRating) {
+					if (isFinalRating) {
 						rating += LanguageModel.SPACE_END_WEIGHT;
 					}
 				} else {
@@ -82,31 +82,27 @@ export class LanguageModel {
 		return 1;
 	}
 
-	public rate(name: string, finalRating?: boolean): number {
-		if (finalRating === undefined || finalRating === null) {
-			finalRating = false;
-		}
-
+	public rate(name: string, isFinalRating: boolean = false): number {
 		let total = 0;
 		for (let n = 2; n < 5; n++) {
 			const end = name.length - n + 1;
 			const weight = this.getWeight(n);
 			for (let i = 0; i < end; i++) {
 				const ngram = name.substring(i, i + n);
-				let rating = this.rateNGram(ngram, finalRating);
+				let rating = this.rateNGram(ngram, isFinalRating);
 
 				if (this.options.nGramBackoff) {
 					if (i === 0) {
 						for (let j = 1; j < n; j++) {
 							const backoff = name.substring(0, j);
-							rating += this.rateNGram(backoff, finalRating);
+							rating += this.rateNGram(backoff, isFinalRating);
 						}
 					}
 
 					if (i === end - 1) {
 						for (let j = 1; j < n; j++) {
 							const backoff = name.substring(name.length - j, name.length);
-							rating += this.rateNGram(backoff, finalRating);
+							rating += this.rateNGram(backoff, isFinalRating);
 						}
 					}
 				}

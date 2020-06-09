@@ -16,8 +16,13 @@ export class NameGenerator {
 	}
 
 	public runGenerator(): string[] {
-		const name = this.settings.name.toLowerCase();
-		const letters = [].concat(this.getLetters(name), this.getLetters(this.settings.sigil));
+		const name = this.settings.name.toUpperCase();
+		let sigil = this.settings.sigil;
+		if (sigil === null || sigil === undefined) {
+			sigil = '';
+		}
+		sigil = sigil.toUpperCase();
+		const letters = [].concat(this.getLetters(name), this.getLetters(sigil));
 		for (let i = 0; i < this.settings.wordCount - 1; i++) {
 			letters.push('-');
 		}
@@ -39,7 +44,7 @@ export class NameGenerator {
 		}
 
 		const closed = new Set<string>();
-		const names = new PriorityQueue<Name>();
+		const names = new PriorityQueue<Name>((a, b) => a.prio - b.prio);
 		const set = new Set(letters);
 		for (const letter of set) {
 			const lIndex = letters.indexOf(letter);
@@ -69,7 +74,9 @@ export class NameGenerator {
 		let out: string[] = [];
 		names.forEach( e => out.push(e.name));
 		if (end) {
-			out = out.map(s => s.replace(/^-+/, ''))	// Remove Leading dashes
+			out = out
+					.reverse()
+					.map(s => s.replace(/^-+/, ''))	// Remove Leading dashes
 					.map(s => s.replace(/-+$/, ''))		// Remove Trailing dashes
 					.map(s => s[0].toUpperCase() + s.slice(1).toLowerCase());
 		}

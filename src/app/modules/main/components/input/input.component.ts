@@ -19,8 +19,8 @@ export class InputComponent implements OnInit {
 	biWeight = 1.0;
 	triWeight = 1.0;
 	quadWeight = 1.0;
-	numberOfNames = 15;
-	beamSize = 15;
+	numberOfNames = 30;
+	beamSize = 30;
 	sigil = 'X';
 	backoff = true;
 
