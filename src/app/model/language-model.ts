@@ -1,6 +1,5 @@
 import { LanguageModelOptions } from './language-model-options';
-import * as data from './data/english-model.json';
-import { NullTemplateVisitor } from '@angular/compiler';
+import * as data from '../../assets/english-model.json';
 
 interface Model {
 	monograms: any;
