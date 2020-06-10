@@ -37,9 +37,11 @@ export class MainComponent implements OnInit {
 		const generator = new NameGenerator(this.options);
 		setTimeout( () => {
 			console.log('Start Name Generation');
+			const t0 = performance.now();
 			this.names = generator.runGenerator();
+			const t1 = performance.now();
 			console.log('Done');
-			console.log(this.names);
+			console.log('Generation took ' + (t1 - t0) + ' milliseconds.');
 		});
 	}
 }

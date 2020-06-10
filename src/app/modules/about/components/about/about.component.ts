@@ -10,11 +10,8 @@ export class AboutComponent implements OnInit {
 	// @ts-ignore
 	readonly aboutSections = sections.default;
 
-	constructor() {
-		console.dir(this.aboutSections);
-	}
+	constructor() {}
 
-	ngOnInit(): void {
-	}
+	ngOnInit(): void {}
 
 }
