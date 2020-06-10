@@ -51,7 +51,7 @@ export class LanguageModel {
 	private getWeight(n: number): number {
 		return this.weights[n - 2];
 	}
-	
+
 	private getNGramRating(ngram: string) {
 		const map = this.getMap(ngram.length);
 		if (map.has(ngram)) {
