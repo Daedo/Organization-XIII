@@ -1,0 +1,67 @@
+[
+	{
+		"header":"Why does this project exist?",
+		"content": "It was just one of those days, where you really need to know the name your Nobody would have if they joined Organization-XIII. Sadly a lot of the online tools for solving this problem weren’t all that great, so we just made our own."
+	}, {
+		"header":"Does a name generator really need so many settings?",
+		"content": "Well, no. It is really over-engineered but that kind of was the point of this whole thing. If you need a more detailed explanation what each parameter does, just keep reading."
+	}, {
+		"header":"How does the generator work?",
+		"content": "So, in order to create the Organization-XIII name of a Nobody one takes the original name of the person (the Somebody), adds a X (the Recusant's Sigil) and then uses all those letters to create a new name. The problem with that is, that not every letter is equally good, so randomly shuffling letters around might result in something like \"Srxao\". While this is technically a correctly generated Nobody-name for the Sora, it doesn’t exactly roll off the tongue. So instead what we use is called an \"n-Gram Model\" to rate the \"pronounce-abillity\" of each name."
+	}, {
+		"header":  "You What?",
+		"content": "In every language there are certain letter combinations that are more common than others. So in English the combination \"ing\" is a lot more common than \"gni\". The basic idea of our method is, that is a name has a lot of common letter combinations, it should be easier to pronounce than one with few common letter combinations. These letter combinations are called Bigrams, Trigrams, and Quadgrams (depending on the number of letters) or more generally  \"n-grams\". So for every name we look at all the bigrams, trigram, and quadgrams it contains and assign a score depending on how common the name’s n-grams are. We then use beam search to find the names with the best score."
+	}, {
+		"header":  "Again... You What?",
+		"content": "For every name there are a lot of Nobody-names... Like... A lot, a lot... If we take a seven letter name and add the sigil to it, we can create up to 8! = 40.320 name combinations and this only gets worse the longer the name gets, so we can’t look at every possible name. For this purpose we use a method called beam search: The tool builds up names letter-by-letter promising looking names are kept in the protective light of the search beam. All others will be swallowed by darkness, doomed to a live of eternal torment and suffering where every moment is a living nightmare and every breath you take will fill your lungs with burning sulfur until you can only wish for the sweet release of death... But on the plus side it really speeds up computation."
+	}, {
+		"header":  "Uhh... Okay... About the settings...",
+		"content": "Right, so here is an explanation of every option."
+	}, {
+		"header":  "Somebody Name",
+		"content": "Enter the name of the person you wish to Organization-XIII-ify."
+	}, {
+		"header":  "Number of Generated Names",
+		"content": "How many names should be created. Note that if the name is too short, or the beam size is too small the tool will only create fewer names."
+	}, {
+		"header":  "Words Per Name",
+		"content": "If you want some fancy hyphens in you name to be even more edgy increase this setting. This might help if you have a longer name with a lot of consonants."
+	}, {
+		"header":  "Recusant's Sigil",
+		"content": "Due to some plot contrivances adding an X to your name allows Xehanort to track you. It also makes your name a lot cooler. Should you have something against the letter X, or in case you worry whether this kind of tacking is compliant with article 5 section 1 of the GDPR you can change the letter to whatever tickles your fancy. If you leave it blank no letters will be added, and if you add multiple letters, multiple letters are added. Note, that the order of those letters will probably change in the final name."
+	}, {
+		"header":  "Beam Size",
+		"content": "As described above this setting controls how many of the possible names will get considered for the final result. Increasing this option will generally lead to better outcomes, but will also take longer. If the setting is too small the tool might also not be able to produce as many names as you want."
+	}, {
+		"header":  "Bigram / Trigram / Quadgram Weight",
+		"content": "With these three sliders you can control how important it is that the resulting names contains two, three, and four letter combinations that are common in english. You can just play around with them if you want. If all three are set to zero you will just get random anagrams, but if you do this I will silently judge you."
+	}, {
+		"header":  "Use N-Gram Backoff",
+		"content": "While this method is really neat due to math, it has the tendency of placing uncommon letters at the start or end of a word (the exact computations are left as an exercise to the reader). This can be fixed using a method called \"N-Gram Backoff\". If you don’t mind literally all your results starting or ending in X, you can turn it off."
+	}, {
+		"header":  "I want to use the tool/ the generated names for X, may I?",
+		"content": "Sure. The code is open source on GitHub (link at the top) under the MIT License. If you want to something with it, have at it. Giving credit would be nice thou."
+	}, {
+		"header":  "I found a bug? What should I do?",
+		"content": "Take it outside. Most bugs are really useful for our ecosystem. No, but seriously If you could open an issue at our GitHub page (link at the top) this would be much appreciated. "
+	}, {
+		"header":  "I want to contribute to this mess!",
+		"content": "For real?"
+	}, {
+		"header":  "Yes, I am determined, I’ve trained my whole life, hoping that one day I could work on a project that applies overly elaborate language processing methods to problems of little to no relevance.",
+		"content": "Okay... Cool... If you want to contribute, just have a look at the GitHub page (link at the top). If you see something that could be improved, create an issue or even better a pull request."
+	}, {
+		"header":  "There is this thing in Kingdom Hearts I don’t understand, can you explain it to me?",
+		"content": "I’m sorry, no. I’m still not sure if I understand the plot myself... To be honest I’m not even sure Tetsuya Nomura fully understands it."
+	}, {
+		"header":  "Who are you?",
+		"content": "I’m you."
+	}, {
+		"header":  "No, I’M me!",
+		"content": "\"I’m me,\" he says."
+	}, {
+		"header":  "Wait a minute... This tool is just an elaborate shitpost!",
+		"content": "What did you expect when you started reading the documentation of a tool that generates Organization-XIII nobody names?"
+	}
+]
+
