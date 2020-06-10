@@ -7,6 +7,6 @@
 				<b>{{section.header}}</b>
 			</mat-panel-title>
 		</mat-expansion-panel-header>
-		<p>{{section.content}}</p>
+		<p [innerHTML]="section.content | repoLink"></p>
 	</mat-expansion-panel>
 </mat-accordion>

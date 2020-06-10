@@ -37,19 +37,19 @@
 		"content": "With these three sliders you can control how important it is that the resulting names contains two, three, and four letter combinations that are common in english. You can just play around with them if you want. If all three are set to zero you will just get random anagrams, but if you do this I will silently judge you."
 	}, {
 		"header":  "Use N-Gram Backoff",
-		"content": "While this method is really neat due to math, it has the tendency of placing uncommon letters at the start or end of a word (the exact computations are left as an exercise to the reader). This can be fixed using a method called \"N-Gram Backoff\". If you don’t mind literally all your results starting or ending in X, you can turn it off."
+		"content": "While this method is really neat, due to math, it has the tendency of placing uncommon letters at the start or end of a word (the exact computations are left as an exercise to the reader). This can be fixed using a method called \"N-Gram Backoff\". If you don’t mind literally all your results starting or ending in X, you can turn it off."
 	}, {
 		"header":  "I want to use the tool/ the generated names for X, may I?",
-		"content": "Sure. The code is open source on GitHub (link at the top) under the MIT License. If you want to something with it, have at it. Giving credit would be nice thou."
+		"content": "Sure. The code is open source on GitHub under the MIT License. If you want to something with it, have at it. Giving credit would be nice thou."
 	}, {
 		"header":  "I found a bug? What should I do?",
-		"content": "Take it outside. Most bugs are really useful for our ecosystem. No, but seriously If you could open an issue at our GitHub page (link at the top) this would be much appreciated. "
+		"content": "Take it outside. Most bugs are really useful for our ecosystem. No, but seriously If you could open an issue at our GitHub page this would be much appreciated. "
 	}, {
 		"header":  "I want to contribute to this mess!",
 		"content": "For real?"
 	}, {
 		"header":  "Yes, I am determined, I’ve trained my whole life, hoping that one day I could work on a project that applies overly elaborate language processing methods to problems of little to no relevance.",
-		"content": "Okay... Cool... If you want to contribute, just have a look at the GitHub page (link at the top). If you see something that could be improved, create an issue or even better a pull request."
+		"content": "Okay... Cool... If you want to contribute, just have a look at the GitHub page. If you see something that could be improved, create an issue or even better a pull request."
 	}, {
 		"header":  "There is this thing in Kingdom Hearts I don’t understand, can you explain it to me?",
 		"content": "I’m sorry, no. I’m still not sure if I understand the plot myself... To be honest I’m not even sure Tetsuya Nomura fully understands it."
