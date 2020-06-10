@@ -21,7 +21,7 @@ export class AppComponent {
 	) {
 		this.matIconRegistry.addSvgIcon(
 			'github',
-			this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/github-logo.svg')
+			this.domSanitizer.bypassSecurityTrustResourceUrl('./assets/github-logo.svg')
 		);
 	}
 }
