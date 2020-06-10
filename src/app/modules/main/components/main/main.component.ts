@@ -3,6 +3,7 @@ import { GeneratorOptions } from '../../../../model/generator-options';
 import { NameGenerator } from 'src/app/model/name-genrator';
 import { ModelLoaderService } from '../../services/model-loader.service';
 import { promise } from 'protractor';
+import { timeout } from 'rxjs/operators';
 
 
 @Component({
@@ -35,16 +36,18 @@ export class MainComponent implements OnInit {
 		this.names = null;
 		this.options = options;
 
-		this.loader.subscribeToModel( model => {
-			console.log('Init Generator');
-			const generator = new NameGenerator(this.options, model);
+		setTimeout(() =>
+			this.loader.subscribeToModel( model => {
+				console.log('Init Generator');
+				const generator = new NameGenerator(this.options, model);
 
-			console.log('Start Name Generation');
-			const t0 = performance.now();
-			this.names = generator.runGenerator();
-			const t1 = performance.now();
-			console.log('Done');
-			console.log('Generation took ' + (t1 - t0) + ' milliseconds.');
-		});
+				console.log('Start Name Generation');
+				const t0 = performance.now();
+				this.names = generator.runGenerator();
+				const t1 = performance.now();
+				console.log('Done');
+				console.log('Generation took ' + (t1 - t0) + ' milliseconds.');
+			})
+		);
 	}
 }
