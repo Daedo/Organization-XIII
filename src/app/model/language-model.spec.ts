@@ -1,13 +1,24 @@
 import { LanguageModel } from './language-model';
 import { LanguageModelOptions } from './language-model-options';
+import { TestBed, async, inject } from '@angular/core/testing';
+import { ModelLoaderService } from '../modules/main/services/model-loader.service';
 
 describe('Language Model', () => {
 	let model: LanguageModel;
 
-	beforeAll(() => {
+	beforeAll(async(() => {
+		TestBed.configureTestingModule({
+			providers: [ModelLoaderService]
+		}).compileComponents();
+	}));
+
+	beforeAll( async(inject([ModelLoaderService], (loader: ModelLoaderService) => {
 		const options = new LanguageModelOptions(1, 1, 1, true);
-		model = new LanguageModel(options);
-	});
+		loader.subscribeToModel(m => {
+			model = new LanguageModel(options, m);
+		});
+	})));
+
 
 	it('Bigram Check', () => {
 		expect(model.rate('XAX')).toBeLessThan(model.rate('XXA'));

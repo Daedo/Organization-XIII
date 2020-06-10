@@ -1,6 +1,7 @@
 import { GeneratorOptions } from './generator-options';
 import { LanguageModel } from './language-model';
 import * as PriorityQueue from 'priorityqueuejs';
+import { ParsedModel } from './model';
 
 
 interface Name {
@@ -11,8 +12,8 @@ interface Name {
 export class NameGenerator {
 	private languageModel: LanguageModel;
 
-	constructor(private readonly settings: GeneratorOptions) {
-		this.languageModel = new LanguageModel(settings.modelOptions);
+	constructor(private readonly settings: GeneratorOptions, model: ParsedModel) {
+		this.languageModel = new LanguageModel(settings.modelOptions, model);
 	}
 
 	private static formatName(name: string): string {

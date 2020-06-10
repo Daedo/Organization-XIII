@@ -36,7 +36,7 @@ jobs:
         ls
         cp index.html 404.html
         git add 404.html
-        git commit -m "Automatic create 404 page."
+        git commit --allow-empty -m "Automatic create 404 page."
         git push
 
 

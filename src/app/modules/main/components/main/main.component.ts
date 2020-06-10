@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneratorOptions } from '../../../../model/generator-options';
 import { NameGenerator } from 'src/app/model/name-genrator';
+import { ModelLoaderService } from '../../services/model-loader.service';
+import { promise } from 'protractor';
 
 
 @Component({
@@ -12,7 +14,7 @@ export class MainComponent implements OnInit {
 	private options: GeneratorOptions;
 	names: string[];
 
-	constructor() {
+	constructor(private loader: ModelLoaderService) {
 		this.options = null;
 		this.names = null;
 	}
@@ -29,13 +31,14 @@ export class MainComponent implements OnInit {
 		return this.names !== null;
 	}
 
-	generateNames(options: GeneratorOptions): void {
+	async generateNames(options: GeneratorOptions): Promise<void> {
 		this.names = null;
 		this.options = options;
 
-		// Send the generator to the worker
-		const generator = new NameGenerator(this.options);
-		setTimeout( () => {
+		this.loader.subscribeToModel( model => {
+			console.log('Init Generator');
+			const generator = new NameGenerator(this.options, model);
+
 			console.log('Start Name Generation');
 			const t0 = performance.now();
 			this.names = generator.runGenerator();

@@ -1,51 +1,17 @@
 import { LanguageModelOptions } from './language-model-options';
-import * as data from '../../assets/english-model.json';
+import { ParsedModel } from './model';
 
-interface Model {
-	monograms: any;
-	bigrams: any;
-	trigrams: any;
-	quadgrams: any;
-}
-
-const model = (data as any).default as Model;
 
 export class LanguageModel {
 	private static readonly EMPTY_WORD_WEIGHT = 100;
-	private maps: Map<string, number>[];
 	private weights: number[];
 
-	constructor(private readonly options: LanguageModelOptions) {
-		this.loadModel();
+	constructor(private readonly options: LanguageModelOptions, private readonly nGramModel: ParsedModel) {
 		this.weights = [options.biWeight, options.triWeight, options.quadWeight];
 	}
 
-	private loadModel() {
-		const monograms = new Map();
-		this.fill(monograms, model.monograms);
-
-		const bigrams = new Map();
-		this.fill(bigrams, model.bigrams);
-
-		const trigrams = new Map();
-		this.fill(trigrams, model.trigrams);
-
-		const quadgrams = new Map();
-		this.fill(quadgrams, model.quadgrams);
-		this.maps = [monograms, bigrams, trigrams, quadgrams];
-	}
-
-	private fill(map: Map<string, number>, gData: any) {
-		for (const gram in gData) {
-			if (gData.hasOwnProperty(gram)) {
-				const value = gData[gram];
-				map.set(gram, value);
-			}
-		}
-	}
-
 	private getMap(n: number): Map<string, number> {
-		return this.maps[n - 1];
+		return this.nGramModel[n - 1];
 	}
 
 	private getWeight(n: number): number {
