@@ -22,7 +22,9 @@
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
     "@types/priorityqueuejs": "^1.0.1",
+    "@types/punycode": "^2.1.0",
     "priorityqueuejs": "^2.0.0",
+    "punycode": "^2.1.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

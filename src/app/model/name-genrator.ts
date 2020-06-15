@@ -2,7 +2,21 @@ import { GeneratorOptions } from './generator-options';
 import { LanguageModel } from './language-model';
 import * as PriorityQueue from 'priorityqueuejs';
 import { ParsedModel } from './model';
+import * as pc from 'punycode';
 
+// @ts-ignore
+const punycode = pc.default;
+
+
+const symbolRegex = /(\P{M})(\p{M})*/gu;
+const decodeStripped = (s: string) => {
+	// Remove any combining marks, leaving only the symbols they belong to:
+	const stripped = s.replace(symbolRegex, ($0, symbol, combiningMarks) => {
+		return symbol;
+	});
+	// Account for astral symbols / surrogates, just like we did before:
+	return punycode.ucs2.decode(stripped);
+};
 
 interface Name {
 	prio: number;
@@ -39,9 +53,17 @@ export class NameGenerator {
 	}
 
 	public getLetters(text: string): string[] {
-		const out = [];
-		for (let i = 0; i < text.length; i++) {
-			out.push(text.substr(i, 1));
+		const out: string[] = decodeStripped(text)
+				.map(c => punycode.ucs2.encode([c]));
+
+		// Deal with skintone modifiers
+		for (let i = out.length - 1; i > 0; i--) {
+			if (out[i].charCodeAt(0) === 0xD83C) {
+				if (out[i].charCodeAt(1) >= 0xDFFB || out[i].charCodeAt(1) <= 0xDFFF) {
+					out[i - 1] += out[i];
+					out.splice(i, 1);
+				}
+			}
 		}
 		return out;
 	}
