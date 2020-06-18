@@ -23,6 +23,7 @@
     "@angular/router": "~9.1.9",
     "@types/priorityqueuejs": "^1.0.1",
     "@types/punycode": "^2.1.0",
+    "immutable": "^4.0.0-rc.12",
     "priorityqueuejs": "^2.0.0",
     "punycode": "^2.1.1",
     "rxjs": "~6.5.4",

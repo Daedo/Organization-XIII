@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { GeneratorOptions } from '../../../../model/generator-options';
 import { NameGenerator } from 'src/app/model/name-genrator';
 import { ModelLoaderService } from '../../services/model-loader.service';
-import { promise } from 'protractor';
-import { timeout } from 'rxjs/operators';
 
 
 @Component({
@@ -11,43 +9,57 @@ import { timeout } from 'rxjs/operators';
 	templateUrl: './main.component.html',
 	styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, AfterViewChecked {
 	private options: GeneratorOptions;
 	names: string[];
+	intermediateResults: IteratorResult<string[], string[]>;
+	private updateDone: boolean;
+	private currentGenerator: Generator<string[], string[], boolean>;
 
 	constructor(private loader: ModelLoaderService) {
 		this.options = null;
 		this.names = null;
+		this.intermediateResults = null;
+		this.currentGenerator = null;
+		this.updateDone = true;
 	}
 
 	ngOnInit(): void {
 	}
 
 	get isLoading(): boolean {
-		// We have options but we don't yet have results.
-		return this.options !== null && this.names === null;
+		// We have options but we don't yet have the final results.
+		return !this.updateDone;
 	}
 
 	get hasOutput(): boolean {
 		return this.names !== null;
 	}
 
-	async generateNames(options: GeneratorOptions): Promise<void> {
+	ngAfterViewChecked(): void {
+		if (!this.updateDone) {
+			setTimeout(() => {
+				this.intermediateResults = this.currentGenerator.next();
+				this.updateDone = this.intermediateResults.done;
+				this.names = this.intermediateResults.value;
+			});
+		}
+	}
+
+	generateNames(options: GeneratorOptions): void {
 		this.names = null;
+		this.intermediateResults = null;
+		this.updateDone = true;
 		this.options = options;
 
-		setTimeout(() =>
-			this.loader.subscribeToModel( model => {
-				console.log('Init Generator');
-				const generator = new NameGenerator(this.options, model);
-
-				console.log('Start Name Generation');
-				const t0 = performance.now();
-				this.names = generator.runGenerator();
-				const t1 = performance.now();
-				console.log('Done');
-				console.log('Generation took ' + (t1 - t0) + ' milliseconds.');
-			})
-		);
+		console.log('Subscribe To Model');
+		this.loader.subscribeToModel( model => {
+			console.log('Init Generator');
+			const generator = new NameGenerator(this.options, model);
+			this.currentGenerator = generator.getIterator();
+			this.intermediateResults = this.currentGenerator.next();
+			this.updateDone = this.intermediateResults.done;
+			this.names = this.intermediateResults.value;
+		});
 	}
 }

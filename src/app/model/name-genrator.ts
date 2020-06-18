@@ -3,6 +3,7 @@ import { LanguageModel } from './language-model';
 import * as PriorityQueue from 'priorityqueuejs';
 import { ParsedModel } from './model';
 import * as pc from 'punycode';
+import { Map } from 'immutable';
 
 // @ts-ignore
 const punycode = pc.default;
@@ -18,11 +19,6 @@ const decodeStripped = (s: string) => {
 	return punycode.ucs2.decode(stripped);
 };
 
-interface Name {
-	prio: number;
-	name: string;
-}
-
 export class NameGenerator {
 	private languageModel: LanguageModel;
 
@@ -35,21 +31,6 @@ export class NameGenerator {
 			.filter(s => s.length > 0)
 			.map(s => s[0].toUpperCase() + s.slice(1).toLowerCase())
 			.join('-');
-	}
-
-	public runGenerator(): string[] {
-		const name = this.settings.name.toUpperCase();
-		let sigil = this.settings.sigil;
-		if (sigil === null || sigil === undefined) {
-			sigil = '';
-		}
-		sigil = sigil.toUpperCase();
-		const letters = [].concat(this.getLetters(name), this.getLetters(sigil));
-		for (let i = 0; i < this.settings.wordCount - 1; i++) {
-			letters.push('-');
-		}
-
-		return this.generate(letters, true);
 	}
 
 	public getLetters(text: string): string[] {
@@ -68,61 +49,98 @@ export class NameGenerator {
 		return out;
 	}
 
-	private generate(letters: string[], end: boolean): string[] {
-		if (letters.length === 1) {
-			return letters;
+	public *getIterator(): Generator<string[], string[]>{
+		const name = this.settings.name.toUpperCase();
+		let sigil = this.settings.sigil;
+		if (sigil === null || sigil === undefined) {
+			sigil = '';
+		}
+		sigil = sigil.toUpperCase();
+		const letters = [].concat(this.getLetters(name), this.getLetters(sigil));
+		for (let i = 0; i < this.settings.wordCount - 1; i++) {
+			letters.push('-');
 		}
 
+		let states = [this.getInitialState(letters)];
+		while (!states[0].isFinished()) {
+			yield states.map(s => NameGenerator.formatName(s.name));
+			states = this.generateIteration(states);
+		}
+
+		return states.map(s => NameGenerator.formatName(s.name));
+	}
+
+	private getInitialState(letters: string[]): State {
+		const counts = {};
+		for (const letter of letters) {
+			counts[letter] = counts[letter] ? counts[letter] + 1 : 1;
+		}
+		const map = Map(counts) as Map<string, number>;
+		return new State('', map);
+	}
+
+	private generateIteration(states: State[]): State[] {
+		const pQueue = new PriorityQueue<QueueNode>((a, b) => b.prio - a.prio);
+		const isLastIteration = states[0].isFinalIteration();
 		const closed = new Set<string>();
-		const names = new PriorityQueue<Name>((a, b) => a.prio - b.prio);
-		const set = new Set(letters);
-		for (const letter of set) {
-			const lIndex = letters.indexOf(letter);
-			const sub = this.letterClone(letters, lIndex);
-			const subnames = this.generate(sub, false);
-			for (const subname of subnames) {
-				const optionA = letter + subname;
-				if (! closed.has(optionA)) {
-					closed.add(optionA);
-					const rating = this.languageModel.rate(optionA, end);
-					names.enq({name: optionA, prio: rating});
+		for (const state of states) {
+			const updated = state.getIteratedStates();
+			for (const update of updated) {
+				if (!closed.has(update.name)) {
+					const rating = this.languageModel.rate(update.name, isLastIteration);
+					pQueue.enq({state: update, prio: rating});
+					closed.add(update.name);
 				}
-
-				const optionB = subname + letter;
-				if (! closed.has(optionB)) {
-					closed.add(optionB);
-					const rating = this.languageModel.rate(optionB, end);
-					names.enq({name: optionB, prio: rating});
-				}
-			}
-			if (end) {
-				this.shrinkQueue(names, this.settings.numberOfNames);
-			} else {
-				this.shrinkQueue(names, this.settings.beamSize);
 			}
 		}
-		let out: string[] = [];
-		names.forEach( e => out.push(e.name));
-		if (end) {
-			out = out.reverse() // Order by decreasing pronouncabillity
-					.map(NameGenerator.formatName); // Capitalize
+
+		const len = isLastIteration ? this.settings.numberOfNames : this.settings.beamSize;
+		const out = [];
+		for (let i = 0; i < len; i++) {
+			if (pQueue.isEmpty()) {
+				break;
+			}
+			out.push(pQueue.deq().state);
+		}
+		return out.reverse();
+	}
+}
+
+interface QueueNode {
+	prio: number;
+	state: State;
+}
+
+class State {
+	constructor(public readonly name: string, public readonly remainingLetters: Map<string, number>) {}
+
+	private static getUpdate(map: Map<string, number>, key: string) {
+		const val = map.get(key);
+		if (val > 1) {
+			return map.set(key, val - 1);
+		}
+		return map.remove(key);
+	}
+
+	public isFinalIteration(): boolean {
+		if (this.remainingLetters.size > 1) {
+			return false;
+		}
+		const key = this.remainingLetters.keys().next().value;
+		return this.remainingLetters.get(key) === 1;
+	}
+
+	public isFinished(): boolean {
+		return this.remainingLetters.isEmpty();
+	}
+
+	public getIteratedStates(): State[] {
+		const out: State[] = [];
+		for (const key of this.remainingLetters.keys()) {
+			const updatedState = State.getUpdate(this.remainingLetters, key);
+			out.push(new State(key + this.name, updatedState));
+			out.push(new State(this.name + key, updatedState));
 		}
 		return out;
-	}
-
-	private letterClone(letters: string[], index: number): string[] {
-		const clone = [];
-		for (let i = 0; i < letters.length; i++) {
-			if (i !== index) {
-				clone.push(letters[i]);
-			}
-		}
-		return clone;
-	}
-
-	private shrinkQueue(queue: PriorityQueue<any>, size: number) {
-		while (queue.size() > size) {
-			queue.deq();
-		}
 	}
 }
