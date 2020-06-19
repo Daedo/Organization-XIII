@@ -37,7 +37,7 @@ export class InputComponent implements OnInit {
 
 	/**
 	 * Checks if the input provided by the user is valid.
-	 * Returns a list of all errors found. 
+	 * Returns a list of all errors found.
 	 * If the input is valid this list will be empty.
 	 */
 	validateInput(): string[] {
