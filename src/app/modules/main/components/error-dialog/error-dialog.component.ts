@@ -5,6 +5,10 @@ interface DialogData {
 	errorMessage: string[];
 }
 
+/**
+ * The ErrorDialogComponent is an angular material diaglog used to display an error message,
+ * when the user tries to trigger the name generation with invalid date.
+ */
 @Component({
 	selector: 'app-error-dialog',
 	templateUrl: './error-dialog.component.html',

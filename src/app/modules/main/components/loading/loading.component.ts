@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as data from '../../../../../assets/loading-texts.json';
 
+/**
+ * The LoadingComponent displays a loading bar, with a random text, picked from the loading-texts.json.
+ */
 @Component({
 	selector: 'app-loading',
 	templateUrl: './loading.component.html',

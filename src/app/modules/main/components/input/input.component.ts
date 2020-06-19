@@ -4,6 +4,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { LanguageModelOptions } from 'src/app/model/language-model-options';
 
+/**
+ * The InputCompnent allows the user to configure the name generation and trigger it.
+ */
 @Component({
 	selector: 'app-input',
 	templateUrl: './input.component.html',
@@ -11,6 +14,7 @@ import { LanguageModelOptions } from 'src/app/model/language-model-options';
 })
 export class InputComponent implements OnInit {
 
+	// The generate emitter sends a message every thime the user kicks of the name generation with valid data.
 	@Output()
 	generate: EventEmitter<GeneratorOptions>;
 
@@ -31,6 +35,11 @@ export class InputComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
+	/**
+	 * Checks if the input provided by the user is valid.
+	 * Returns a list of all errors found. 
+	 * If the input is valid this list will be empty.
+	 */
 	validateInput(): string[] {
 		const out = [];
 
@@ -69,7 +78,12 @@ export class InputComponent implements OnInit {
 		return null;
 	}
 
-	updateOptions(): void {
+	/**
+	 * Called when the user clicks on the button to generate the name.
+	 * Triggers input validation.
+	 * If the input is valid it triggers a generate event.
+	 */
+	kickoffGeneration(): void {
 		const errors = this.validateInput();
 		if (errors.length !== 0) {
 			this.dialog.open(ErrorDialogComponent, {

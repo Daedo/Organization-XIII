@@ -1,6 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+/**
+ * The RepoLinkPipe automatically inserts link to the projects github page, into the content of the about page.
+ * Everytime "GitHub"/ "GitHub page" is mentioned a link is added.
+ */
 @Pipe({
 	name: 'repoLink'
 })

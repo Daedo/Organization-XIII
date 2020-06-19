@@ -5,6 +5,10 @@ import { ParsedModel } from './model';
 import * as pc from 'punycode';
 import { Map } from 'immutable';
 
+
+/**
+ * Utility functions to deal with unicode problems.
+ */
 // @ts-ignore
 const punycode = pc.default;
 
@@ -19,9 +23,17 @@ const decodeStripped = (s: string) => {
 	return punycode.ucs2.decode(stripped);
 };
 
+/**
+ * The NameGenerator class provides all functions necessary to generate an organization-13 name.
+ */
 export class NameGenerator {
 	private languageModel: LanguageModel;
 
+	/**
+	 * Public constructor
+	 * @param settings The parameters for the name generation, not null.
+	 * @param model The langugage model for the name genreation, not null.
+	 */
 	constructor(private readonly settings: GeneratorOptions, model: ParsedModel) {
 		this.languageModel = new LanguageModel(settings.modelOptions, model);
 	}
@@ -33,7 +45,7 @@ export class NameGenerator {
 			.join('-');
 	}
 
-	public getLetters(text: string): string[] {
+	private getLetters(text: string): string[] {
 		const out: string[] = decodeStripped(text)
 				.map(c => punycode.ucs2.encode([c]));
 
@@ -49,7 +61,13 @@ export class NameGenerator {
 		return out;
 	}
 
+	/**
+	 * Returns an generator object.
+	 * Every next call of this generator produces a list of names with more and more letters.
+	 * The final call returns the actual list of organization 13 names.
+	 */
 	public *getIterator(): Generator<string[], string[]>{
+		// Create a collection of all letters (name, sigil, and word seperators).
 		const name = this.settings.name.toUpperCase();
 		let sigil = this.settings.sigil;
 		if (sigil === null || sigil === undefined) {
@@ -61,12 +79,14 @@ export class NameGenerator {
 			letters.push('-');
 		}
 
+		// Iteratively create names, adding one letter each iteration, yielding intermediate results
 		let states = [this.getInitialState(letters)];
 		while (!states[0].isFinished()) {
 			yield states.map(s => NameGenerator.formatName(s.name));
 			states = this.generateIteration(states);
 		}
 
+		// Return final result
 		return states.map(s => NameGenerator.formatName(s.name));
 	}
 
@@ -79,9 +99,15 @@ export class NameGenerator {
 		return new State('', map);
 	}
 
+	/**
+	 * Single iteration of the beam search.
+	 * @param states The current state objects at the start of the search.
+	 */
 	private generateIteration(states: State[]): State[] {
+		// Queue for finding the most promissing names.
 		const pQueue = new PriorityQueue<QueueNode>((a, b) => b.prio - a.prio);
 		const isLastIteration = states[0].isFinalIteration();
+		// Set to avoid duplicate name creations.
 		const closed = new Set<string>();
 		for (const state of states) {
 			const updated = state.getIteratedStates();
@@ -94,6 +120,7 @@ export class NameGenerator {
 			}
 		}
 
+		// Beam-search part. After each iteration we only keep the "len" most promissing names.
 		const len = isLastIteration ? this.settings.numberOfNames : this.settings.beamSize;
 		const out = [];
 		for (let i = 0; i < len; i++) {
@@ -102,6 +129,7 @@ export class NameGenerator {
 			}
 			out.push(pQueue.deq().state);
 		}
+		// Referse, so the most promissing name is at the front.
 		return out.reverse();
 	}
 }
@@ -111,7 +139,15 @@ interface QueueNode {
 	state: State;
 }
 
+/**
+ * An object that represents an intermediate state of a name.
+ */
 class State {
+	/**
+	 * Public constructor
+	 * @param name the current name, generated so far, not null.
+	 * @param remainingLetters the remaining letters to be added to this name, not null.
+	 */
 	constructor(public readonly name: string, public readonly remainingLetters: Map<string, number>) {}
 
 	private static getUpdate(map: Map<string, number>, key: string) {
@@ -122,6 +158,9 @@ class State {
 		return map.remove(key);
 	}
 
+	/**
+	 * Returns true if only one letter is left to be added.
+	 */
 	public isFinalIteration(): boolean {
 		if (this.remainingLetters.size > 1) {
 			return false;
@@ -130,10 +169,16 @@ class State {
 		return this.remainingLetters.get(key) === 1;
 	}
 
+	/**
+	 * Returns true if no letters are to be added.
+	 */
 	public isFinished(): boolean {
 		return this.remainingLetters.isEmpty();
 	}
 
+	/**
+	 * Generate all possible state reachable from adding a remaining letter at the front or back of the current name.
+	 */
 	public getIteratedStates(): State[] {
 		const out: State[] = [];
 		for (const key of this.remainingLetters.keys()) {

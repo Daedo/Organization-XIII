@@ -1,11 +1,18 @@
 import { LanguageModelOptions } from './language-model-options';
 import { ParsedModel } from './model';
 
-
+/**
+ * The LanguageModel class provides functions to rate names using a n-gram model.
+ */
 export class LanguageModel {
 	private static readonly EMPTY_WORD_WEIGHT = 100;
 	private weights: number[];
 
+	/**
+	 * Public constructor.
+	 * @param options The options for the rating, not null.
+	 * @param nGramModel The language model data, not null.
+	 */
 	constructor(private readonly options: LanguageModelOptions, private readonly nGramModel: ParsedModel) {
 		this.weights = [options.biWeight, options.triWeight, options.quadWeight];
 	}
@@ -60,13 +67,18 @@ export class LanguageModel {
 		return total;
 	}
 
-	public rate(name: string, isFinalRating: boolean = false): number {
+	/**
+	 * Rates a given name and returns the names, badness-score.
+	 * @param name The name to be rated, not null.
+	 * @param punishEmptyWords Wheather an empty word should be punished with a high badness-score.
+	 */
+	public rate(name: string, punishEmptyWords: boolean = false): number {
 		let total = 0;
 		const words = name.split('-');
 		for (const word of words) {
 			if (word.length > 0) {
 				total += this.rateWord(word);
-			} else if (isFinalRating) {
+			} else if (punishEmptyWords) {
 				total += LanguageModel.EMPTY_WORD_WEIGHT;
 			}
 		}

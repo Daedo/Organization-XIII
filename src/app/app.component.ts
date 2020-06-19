@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 
+/**
+ * The AppComponent is the main UI component. Displays the navbar.
+ */
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -10,6 +13,9 @@ import { MatIconRegistry } from '@angular/material/icon';
 export class AppComponent {
 	title = 'Organization-XIII';
 
+	/**
+	 * The links in the navbar.
+	 */
 	navLinks = [
 		{ label: 'Get Edgy!', path: 'XIII' },
 		{ label: 'About', path: 'about' },

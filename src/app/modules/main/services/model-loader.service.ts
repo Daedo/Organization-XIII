@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Model, ParsedModel } from 'src/app/model/model';
-import { promise } from 'protractor';
 import { BehaviorSubject } from 'rxjs';
-import { takeUntil, takeWhile, filter, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
+/**
+ * The model load service is used to asynchroniously load the langauge model.
+ * This helps to reduce the first load of the application.
+ */
 @Injectable({
 	providedIn: 'root'
 })
@@ -15,6 +18,9 @@ export class ModelLoaderService {
 		this.load();
 	}
 
+	/**
+	 * Triggers the loading. If the http requests fails it automatically tries again.
+	 */
 	private load(): void {
 		console.log('Start Loading Model');
 
@@ -28,14 +34,16 @@ export class ModelLoaderService {
 		});
 	}
 
+	/**
+	 * Wait for a language model to be present.
+	 * @param callback  If the model was loaded or if the model is already present the callback will be executed.
+	 */
 	public subscribeToModel(callback: (ParsedModel) => any) {
 		this.subject
 			.pipe(filter( m => m !== null))
 			.pipe(take(1))
 			.subscribe(callback);
 	}
-
-
 
 	private parseModel(model: Model) {
 		const monograms = new Map();

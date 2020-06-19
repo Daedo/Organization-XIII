@@ -1,4 +1,3 @@
-
 export interface Model {
 	monograms: any;
 	bigrams: any;
